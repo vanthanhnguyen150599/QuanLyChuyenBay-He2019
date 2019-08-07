@@ -26,6 +26,7 @@ int main()
 				}
 			case 2:
 				{
+					XoaMB(mb);
 					break;
 				}
 			case 3:
