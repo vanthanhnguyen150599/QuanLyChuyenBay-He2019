@@ -31,6 +31,7 @@ int main()
 				}
 			case 3:
 				{
+					ChinhSuaMB(mb);
 					break;
 				}
 			case 4:
