@@ -47,7 +47,7 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 						}
 					}
 				}
-				else
+				else // tuong duong i == 3
 				{
 					if (j == 1)
 					{
@@ -66,7 +66,7 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 					}
 				}
 			}
-			else
+			else // tuong duong i == 2
 			{
 				if (j == 1 || j == 19)
 				{
@@ -547,7 +547,7 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 			{
 				switch (dem)
 				{
-					case 0:
+					case 0: // So Hieu
 						{
 							if (mb->SoHieuMB.length() < 15)
 							{
@@ -567,12 +567,12 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 							}
 						}
 						break;
-					case 1:
+					case 1: // Loai
 						{
 							if (mb->LoaiMayBay.length() < 40)
 							{
-								cout << (char) InHoa(c);
-								mb->LoaiMayBay = mb->LoaiMayBay + (char) InHoa(c);
+								cout << (char) InHoa(c); // xuat ra mang hinh
+								mb->LoaiMayBay = mb->LoaiMayBay + (char) InHoa(c); // them trong bo nho
 							}
 							else
 							{
@@ -621,6 +621,7 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 								if (c == -32 || c == 0)
 								{
 									kytu = 0;
+									c = getch();
 								}
 								else
 								{
@@ -632,14 +633,21 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 								}
 								else
 								{
+									thoat = 1;
 									break;
 								}
 							}
 							mb->SoDong = temp/2;
-							if (!kytu)
+							if (!kytu) // Up/ Down
 							{
 								mb->SoDong = temp/2;
 								thoat = 1;
+							}
+							if (c == 13)
+							{
+								thoat = 1;
+								c = 80;
+								kytu = 0;
 							}
 							break;
 						}
@@ -863,6 +871,7 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 		}
 		if (c == 27)
 		{
+			ChangeColor(15);
 			gotoxy(105,40);
 			cout << "Ban co chac chan muon thoat?";
 			gotoxy(105,41);
@@ -884,7 +893,7 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 				return 0;
 			}
 			gotoxy(105,40);
-			cout << "                                                  ";
+			cout << "                                                   ";
 			gotoxy(105,41);
 			cout << "                                                   ";
 			c = getch();
@@ -901,15 +910,399 @@ bool NhapDuLieuMB(MayBay *mb, DanhSach_MB &ds)
 	}
 	
 }
-bool ThemMB(DanhSach_MB &dsmb)
+void ThemMB(DanhSach_MB &dsmb)
 {
-	dsmb.data[dsmb.SoLuong] = new MayBay;
+	dsmb.data[dsmb.SoLuong] = new MayBay; 
 	if (!NhapDuLieuMB(dsmb.data[dsmb.SoLuong],dsmb))
 	{
 		delete dsmb.data[dsmb.SoLuong];
-		return 0;
+		return;
 	}
 	dsmb.SoLuong++;
-	return 1;
+	return;
+}
+void XoaMB(DanhSach_MB &ds)
+{
+	ChangeColor(15);
+	if (ds.SoLuong == 0)
+	{
+		gotoxy(8,8);
+		cout << "Khong the xoa";
+		return;
+	}
+	gotoxy(99,17);
+	cout << "NHAP THONG TIN";
+	char traitren = 218;
+	char traiduoi = 192;
+	char phaitren = 191;
+	char phaiduoi = 217;
+	char ngang = 196;
+	char doc = 179;
+	gotoxy(92,20); // So Hieu
+	cout << "So Hieu  ";
+	gotoxy(wherex(),wherey()-1);
+	for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 19; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 19)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 19)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 19)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-19,wherey()+1);
+	}
+	gotoxy(103,20);
+	HienConTro();
+	string temp = "";
+	char c = getch();
+	bool kytu;
+	bool timthay = 0;
+	if (c == -32 || c == 0)
+	{
+		c = getch();
+		kytu = 0;
+	}
+	else
+	{
+		kytu = 1;
+	}
+	while (1)
+	{
+		while (c != 27)
+		{
+			timthay = 0;
+			gotoxy(103+temp.length(),20);
+			HienConTro();
+			if (kytu)
+			{
+				if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || (c >= 48 && c <= 57))
+				{
+					if (temp.length() < 15)
+					{
+						cout << (char) InHoa(c);
+						temp = temp + (char) InHoa(c);
+					}
+					else
+					{
+						AnConTro();
+						gotoxy(122,20);
+						cout << "It hon 15 ky tu";
+						Sleep(500);
+						gotoxy(122,20);
+						cout << "                ";
+						gotoxy(118,20);
+						HienConTro();
+					}
+				}
+				if (c == 8)
+				{
+					if (temp.length() == 0)
+					{
+						AnConTro();
+						gotoxy(122,20);
+						cout << "Khong the xoa";
+						Sleep(500);
+						gotoxy(122,20);
+						cout << "               ";
+						gotoxy(103,20);
+						HienConTro();
+					}
+					else
+					{
+						AnConTro();
+						gotoxy(wherex()-1,wherey());
+						cout << " ";
+						gotoxy(wherex()-1,wherey());
+						temp.erase(temp.length()-1);
+						HienConTro();
+					}
+				}
+				if (c == 13) // phim enter
+				{
+					for (int i = 0; i < ds.SoLuong; i++)
+					{
+						if (ds.data[i]->SoHieuMB == temp)
+						{
+							// in ra thong tin cua may bay va hoi nguoi dung co muon xoa k
+							gotoxy(95,25);
+							cout << "Loai  ";
+							gotoxy(wherex(),wherey()-1);
+							for (int i = 1; i <= 3; i++)
+							{
+								for (int j = 1; j <= 44; j++)
+								{
+									if (i == 1 || i == 3)
+									{
+										if (i == 1)
+										{
+											if (j == 1)
+											{
+												cout << traitren;
+											}
+											else
+											{
+												if (j == 44)
+												{
+													cout << phaitren;
+												}
+												else
+												{
+													cout << ngang;
+												}
+											}
+										}
+										else
+										{
+											if (j == 1)
+											{
+												cout << traiduoi;
+											}
+											else
+											{
+												if (j == 44)
+												{
+													cout << phaiduoi;
+												}
+												else
+												{
+													cout << ngang;
+												}
+											}
+										}
+									}
+									else
+									{
+										if (j == 1 || j == 44)
+										{
+											cout << doc;
+										}
+										else
+										{
+											cout << " ";
+										}
+									}
+								}
+								gotoxy(wherex()-44,wherey()+1);
+							}
+							gotoxy(93,30); // So ghe
+							cout << "So Ghe  ";
+							gotoxy(wherex(),wherey()-1);
+							for (int i = 1; i <= 3; i++)
+							{
+								for (int j = 1; j <= 6; j++)
+								{
+									if (i == 1 || i == 3)
+									{
+										if (i == 1)
+										{
+											if (j == 1)
+											{
+												cout << traitren;
+											}
+											else
+											{
+												if (j == 6)
+												{
+													cout << phaitren;
+												}
+												else
+												{
+													cout << ngang;
+												}
+											}
+										}
+										else
+										{
+											if (j == 1)
+											{
+												cout << traiduoi;
+											}
+											else
+											{
+												if (j == 6)
+												{
+													cout << phaiduoi;
+												}
+												else
+												{
+													cout << ngang;
+												}
+											}
+										}
+									}
+									else
+									{
+										if (j == 1 || j == 6)
+										{
+											cout << doc;
+										}
+										else
+										{
+											cout << " ";
+										}
+									}
+								}
+								gotoxy(wherex()-6,wherey()+1);
+							}
+							gotoxy(103,25);
+							cout << ds.data[i]->LoaiMayBay;
+							gotoxy(103,30);
+							if (ds.data[i]->SoDong *2 < 10)
+							{
+								cout << "0" << ds.data[i]->SoDong*2;
+							}
+							else
+							{
+								cout << ds.data[i]->SoDong*2;
+							}
+							gotoxy(103,34);
+							cout << "Ban co chac chan muon xoa";
+							gotoxy(103,35);
+							cout << "Nhan Y de XOA; Nhan phim bat ky de huy";
+							c = getch();
+							if (c == -32 || c == 0)
+							{
+								kytu = 0;
+								c = getch();
+							}
+							else
+							{
+								kytu = 1;
+							}
+							if (InHoa(c) == 89 && kytu)
+							{
+								delete ds.data[i];
+								for (int j = i+1; j < ds.SoLuong; j++)
+								{
+									ds.data[j-1] = ds.data[j];
+								}
+								ds.SoLuong--;
+								gotoxy(108,37);
+								cout << "Xoa thanh cong!";
+								Sleep(500);
+								ClearManHinhChinh();
+								return;
+							}
+							gotoxy(92,24);
+							// xoa tu loai den cuoi 
+							for (int i = 1; i <= 13; i++)
+							{
+								for (int j = 1; j <= 60; j++ )
+								{
+									cout << " ";
+								}
+								gotoxy(wherex()-60,wherey()+1);
+							}
+							// quay ve so hieu de nhap lai
+							gotoxy(103+temp.length(),20);
+							HienConTro();
+							timthay = 1;
+							break;
+							
+						}
+					}
+					if (!timthay)
+					{
+						gotoxy(98,24);
+						cout << "Khong co du lieu";
+						gotoxy(93,26);
+						cout << "Nhan phim bat ky de tiep tuc nhap";
+						AnConTro();
+					}
+				}
+			}
+			c = getch();
+			if (c == -32 || c == 0)
+			{
+				c = getch();
+				kytu = 0;
+			}
+			else
+			{
+				kytu = 1;
+			}
+			if (!timthay)
+			{
+				gotoxy(98,24);
+				cout << "                     ";
+				gotoxy(93,26);
+				cout << "                                  ";
+			}
+		}
+		AnConTro();
+		gotoxy (98,36);
+		cout << "Bam co muon thoat";
+		gotoxy(98,37);
+		cout << "Nhan Y de thoat; Nhan phim bat ky de tiep tuc";
+		c = getch();
+		if (c == -32 || c == 0)
+		{
+			c = getch();
+			kytu = 0;
+		}
+		else
+		{
+			kytu = 1;
+		}
+		if (InHoa(c) == 89 && kytu)
+		{
+			ClearManHinhChinh();
+			return;
+		}
+		else
+		{
+			gotoxy (98,36);
+			cout << "                    ";
+			gotoxy(98,37);
+			cout << "                                                ";
+		}
+	}
 }
 #endif
