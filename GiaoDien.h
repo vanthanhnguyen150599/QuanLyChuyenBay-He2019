@@ -5,6 +5,7 @@
 #include<string>
 #include<string.h>
 #include<conio.h >
+#include<ctime>
 using namespace std;
 void fullscreen()
 {
@@ -469,10 +470,10 @@ void XuLiNhapSo(int &so,char &c, bool &kytu)
 			return;
 		}
 		c = getch ();
-		if(c==-32 || c==0 )
+		if(c == -32 || c == 0)
 		{
-			kytu=0;
-			c= getch();
+			kytu = 0;
+			c = getch();
 		}
 		else
 		{
@@ -493,6 +494,571 @@ void ClearManHinhChinh()
 		}
 		gotoxy(wherex()-154,wherey()+1);
 	}
-	
+	AnConTro();
 }
+bool KiemTraGio(int gio)
+{
+	if (gio > 23)
+	{
+		return 0;
+	}
+	return 1;
+}
+int SoNgayTrongThang(int thang, int nam)
+{
+	if (thang == 1 || thang == 3 || thang == 5 || thang == 7 || thang == 8 || thang == 10 || thang == 12)
+	{
+		return 31;
+	}
+	if (thang == 2)
+	{
+		if (nam%4 == 0 )
+		{
+			return 29;
+		}
+		return 28;
+	}
+	return 30;
+}
+bool KiemTraNgayThang(int ngay, int thang, int nam)
+{
+	if (thang > 12)
+	{
+		return 0;
+	}
+	if (ngay > SoNgayTrongThang(thang,nam))
+	{
+		return 0;
+	}
+	return 1;
+}
+bool SoSanhThoiGianVoiHeThong(int gio, int ngay, int thang, int nam)
+{
+	time_t hientai = time(0);
+	tm *thoigian = localtime(&hientai);
+	if (nam < thoigian->tm_year + 1900)
+	{
+		return 0;
+	}
+	if (nam > thoigian->tm_year + 1900)
+	{
+		return 1;
+	}
+	if (thang < 1 + thoigian->tm_mon)
+	{
+		return 0;
+	}
+	if (thang > 1+thoigian->tm_mon)
+	{
+		return 1;
+	}
+	if (ngay < thoigian->tm_mday)
+	{
+		return 0;
+	}
+	if (ngay > thoigian->tm_mday)
+	{
+		return 1;
+	}
+	if (gio*60 <= (thoigian->tm_hour)*60 + thoigian->tm_min )
+	{
+		return 0;
+	}
+	return 1;
+}
+void KhungCB()
+{
+	char traitren = 218;
+	char traiduoi = 192;
+	char phaitren = 191;
+	char phaiduoi = 217;
+	char ngang = 196;
+	char doc = 179;
+	ChangeColor(15);
+	gotoxy(86,7);
+	cout << "Ma Chuyen Bay  ";
+	gotoxy(wherex(),wherey()-1);
+	for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 19; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 19)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 19)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 19)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-19,wherey()+1);
+	}
+	gotoxy(95,12);
+	cout << "Ngay  ";
+	gotoxy(wherex(),wherey()-1);
+	for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 6; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 6)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-6,wherey()+1);
+	}
+	gotoxy(94,17);
+	cout << "Thang  ";
+	gotoxy(wherex(),wherey()-1);
+	for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 6; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 6)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-6,wherey()+1);
+	}
+	gotoxy(96,22);
+	cout << "Nam  ";
+	gotoxy(wherex(),wherey()-1);
+		for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 6; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 6)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-6,wherey()+1);
+	}
+	gotoxy(96,28);
+	cout << "Gio  ";
+	gotoxy(wherex(),wherey()-1);
+		for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 6; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 6)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 6)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-6,wherey()+1);
+	}
+	gotoxy(91,32);
+	cout << "Diem den  ";
+	gotoxy(wherex(),wherey()-1);
+		for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 24; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 24)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 24)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 24)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-24,wherey()+1);
+	}
+	gotoxy(89,38);
+	cout << "Trang thai  ";
+	gotoxy(wherex(),wherey()-1);
+	for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 14; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 14)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 14)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 14)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-14,wherey()+1);
+	}
+	gotoxy(92,42);
+	cout << "So Hieu  ";
+	gotoxy(wherex(),wherey()-1);
+	for (int i = 1; i <= 3; i++)
+	{
+		for (int j = 1; j <= 19; j++)
+		{
+			if (i == 1 || i == 3)
+			{
+				if (i == 1)
+				{
+					if (j == 1)
+					{
+						cout << traitren;
+					}
+					else
+					{
+						if (j == 19)
+						{
+							cout << phaitren;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+				else
+				{
+					if (j == 1)
+					{
+						cout << traiduoi;
+					}
+					else
+					{
+						if (j == 19)
+						{
+							cout << phaiduoi;
+						}
+						else
+						{
+							cout << ngang;
+						}
+					}
+				}
+			}
+			else
+			{
+				if (j == 1 || j == 19)
+				{
+					cout << doc;
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
+		}
+		gotoxy(wherex()-19,wherey()+1);
+	}
+	gotoxy(97,46);
+	cout << "XAC NHAN";
+	gotoxy(114,46);
+	cout << "HUY";
+}
+
 #endif
