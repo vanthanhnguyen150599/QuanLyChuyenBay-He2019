@@ -1622,7 +1622,7 @@ void ChinhSuaMB(DanhSach_MB &ds)
 							}
 							else
 							{
-								if ((InHoa(c) == 89 && wherex() == 93 && wherey() == 10)
+								if ((InHoa(c) == 89 && wherex() == 93 && wherey() == 10))
 								{
 									gotoxy(92,24);
 									for (int i = 1; i <= 18; i++)
@@ -1776,5 +1776,21 @@ void ChinhSuaMB(DanhSach_MB &ds)
 			cout << "                                                ";
 		}
 	}
+}
+bool NhapDuLieuCB(DanhSach_CB *chuyenbay, List &dscb)
+{
+	KhungCB();
+}
+void ThemCB(List &dscb)
+{
+	dscb.pTail->pNext = new DanhSach_CB;
+	if (!NhapDuLieuCB(dscb.pTail->pNext,dscb))
+	{
+		delete dscb.pTail->pNext;
+		dscb.pTail->pNext = NULL;
+		return;
+	}
+	dscb.pTail = dscb.pTail->pNext;
+	return;
 }
 #endif
