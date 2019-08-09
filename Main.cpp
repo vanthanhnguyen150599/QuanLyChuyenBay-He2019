@@ -37,6 +37,7 @@ int main()
 			case 4:
 				{
 					// Ten ham thuc hien chuc nang
+					ThemCB(cb);
 					break;
 				}
 			case 5:
