@@ -418,7 +418,16 @@ int InHoa(char x)
 	}
 	return (int) x;
 }
-void XuLiNhapSo(int &so,char &c, bool &kytu)
+int luythua10(int somu)
+{
+	int so = 1;
+	for (int i = 1; i <= somu; i++)
+	{
+		so = so*10;
+	}
+	return so;
+}
+void XuLiNhapSo(int &so,char &c, bool &kytu, int gioihanchuso)
 {
 	// Di chuyen lai dung vi tri
 	bool motso;
@@ -435,9 +444,12 @@ void XuLiNhapSo(int &so,char &c, bool &kytu)
 	{
 		if ((c >= 48 && c <= 57) && kytu && so < 10)
 		{
-			cout << c;
-			so = so*10 + (int) c-48;
-			motso = 0;
+			if (so*10 + (int) c - 48 < luythua10(gioihanchuso))
+			{
+				cout << c;
+				so = so*10 + (int) c-48;
+				motso = 0;
+			}
 		}
 		if (c == 8)
 		{
@@ -815,7 +827,7 @@ void KhungCB()
 		}
 		gotoxy(wherex()-6,wherey()+1);
 	}
-	gotoxy(96,28);
+	gotoxy(96,27);
 	cout << "Gio  ";
 	gotoxy(wherex(),wherey()-1);
 		for (int i = 1; i <= 3; i++)
@@ -935,7 +947,7 @@ void KhungCB()
 		}
 		gotoxy(wherex()-24,wherey()+1);
 	}
-	gotoxy(89,38);
+	gotoxy(89,37);
 	cout << "Trang thai  ";
 	gotoxy(wherex(),wherey()-1);
 	for (int i = 1; i <= 3; i++)
