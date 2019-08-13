@@ -444,7 +444,7 @@ void XuLiNhapSo(int &so,char &c, bool &kytu, int gioihanchuso)
 	{
 		if ((c >= 48 && c <= 57) && kytu && so < 10)
 		{
-			if (so*10 + (int) c - 48 < luythua10(gioihanchuso))
+			if (so*10 + (int) c - 48 < luythua10(gioihanchuso) && !(so == 0 && c == 48))
 			{
 				cout << c;
 				so = so*10 + (int) c-48;
