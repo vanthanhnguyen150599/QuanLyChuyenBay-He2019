@@ -429,10 +429,11 @@ int luythua10(int somu)
 }
 void XuLiNhapSo(int &so,char &c, bool &kytu, int gioihanchuso)
 {
+	ChangeColor(15);
 	// Di chuyen lai dung vi tri
 	bool motso;
 //	cout << "adad";
-	if (so < 10 && (c == 8))
+	if (so >= 0 && so < 10 && (c == 8))
 	{
 		motso = 1;
 	}
@@ -442,9 +443,9 @@ void XuLiNhapSo(int &so,char &c, bool &kytu, int gioihanchuso)
 	}
 	while (c != 13)
 	{
-		if ((c >= 48 && c <= 57) && kytu && so < 10)
+		if ((c >= 48 && c <= 57) && kytu && !(so == 0 && c == 48))
 		{
-			if (so*10 + (int) c - 48 < luythua10(gioihanchuso) && !(so == 0 && c == 48))
+			if (so*10 + (int) c - 48 < luythua10(gioihanchuso))
 			{
 				cout << c;
 				so = so*10 + (int) c-48;
@@ -470,6 +471,25 @@ void XuLiNhapSo(int &so,char &c, bool &kytu, int gioihanchuso)
 				gotoxy(wherex()-2,wherey());
 				HienConTro();
 				so = so/10;
+			}
+			if (so == 0)
+			{
+				if (gioihanchuso == 2)
+				{
+					AnConTro();
+					gotoxy(103,wherey());
+					cout << "  ";
+					gotoxy(103,wherey());
+					HienConTro();
+				}
+				else
+				{
+					AnConTro();
+					gotoxy(102,wherey());
+					cout << "    ";
+					gotoxy(102,wherey());
+					HienConTro();
+				}
 			}
 		}
 		if (c == 27 )
