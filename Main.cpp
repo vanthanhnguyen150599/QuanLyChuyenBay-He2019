@@ -37,11 +37,12 @@ int main()
 			case 4:
 				{
 					// Ten ham thuc hien chuc nang
-					ThemCB(cb);
+					ThemCB(cb,mb);
 					break;
 				}
 			case 5:
 				{
+					XoaCB(cb);
 					break;
 				}
 			case 6:
@@ -74,6 +75,8 @@ int main()
 				}
 		}
 		kt = Menu(kt);
-	}
+	} 
+	XuatFileMB(mb);
+	XuatFileCB(cb); 
 	return 0;
 }
