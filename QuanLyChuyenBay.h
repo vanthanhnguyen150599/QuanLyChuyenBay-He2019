@@ -3918,6 +3918,19 @@ bool NhapDuLieuCB(DanhSach_CB *chuyenbay, List &dscb, DanhSach_MB &dsmb)
 
 void ThemCB(List &dscb, DanhSach_MB &dsmb)
 {
+	if (dscb.pHead == NULL && dscb.pTail == NULL)
+	{
+		dscb.pHead = new DanhSach_CB;
+		dscb.pTail = dscb.pHead;
+		if (!NhapDuLieuCB(dscb.pTail,dscb,dsmb))
+		{
+			delete dscb.pTail;
+			dscb.pTail = NULL;
+			dscb.pHead = NULL;
+			return;
+		}
+		return;
+	}
 	dscb.pTail->pNext = new DanhSach_CB;
 	if (!NhapDuLieuCB(dscb.pTail->pNext,dscb,dsmb))
 	{
@@ -4012,10 +4025,12 @@ void XoaCB(List &dscb)
 		kytu = 1;
 	}
 	bool kt = 0;
+	bool timthay = 0;
 	while (1)
 	{
 		while (c != 27)
 		{
+			timthay = 0;
 			kt  = 0;
 			if (kytu)
 			{
@@ -4063,73 +4078,64 @@ void XoaCB(List &dscb)
 				}
 				if (c == 13)
 				{
-					DanhSach_CB *chuyenbay;
-					for (chuyenbay = dscb.pHead; chuyenbay->pNext != NULL; chuyenbay = chuyenbay->pNext)
+					DanhSach_CB *p;
+					for (p = dscb.pHead; p != NULL; p = p->pNext)
 					{
-						if (dscb.pHead->data.MaCB == temp)
+						if (p->data.MaCB == temp)
 						{
+							timthay = 1;
 							AnConTro();
-							ChangeColor(15);
 							KhungCB();
-							gotoxy(40,44);
-							for (int i = 1; i <= 5; i++)
-							{
-								for (int j = 1; j <= 120; j++)
-								{
-									cout << " ";
-								}
-								gotoxy(wherex()-120,wherey()+1);
-							}
 							gotoxy(103,7);
-							cout << dscb.pHead->data.MaCB;
+							cout << p->data.MaCB;
 							gotoxy(103,12);
-							if (dscb.pHead->data.NgayKhoiHanh.Ngay != 0)
+							if (p->data.NgayKhoiHanh.Ngay != 0)
 							{
-								if (dscb.pHead->data.NgayKhoiHanh.Ngay <= 9)
+								if (p->data.NgayKhoiHanh.Ngay <= 9)
 								{
-									cout << "0" << dscb.pHead->data.NgayKhoiHanh.Ngay;
+									cout << "0" << p->data.NgayKhoiHanh.Ngay;
 								}
 								else
 								{
-									cout << dscb.pHead->data.NgayKhoiHanh.Ngay;
+									cout << p->data.NgayKhoiHanh.Ngay;
 								}
 							}
 							gotoxy(103,17);
-							if (dscb.pHead->data.NgayKhoiHanh.Thang != 0)
+							if (p->data.NgayKhoiHanh.Thang != 0)
 							{
-								if (dscb.pHead->data.NgayKhoiHanh.Thang  <= 9)
+								if (p->data.NgayKhoiHanh.Thang  <= 9)
 								{
-									cout << "0" << dscb.pHead->data.NgayKhoiHanh.Thang;
+									cout << "0" << p->data.NgayKhoiHanh.Thang;
 								}
 								else
 								{
-									cout << dscb.pHead->data.NgayKhoiHanh.Thang;
+									cout << p->data.NgayKhoiHanh.Thang;
 								}
 							}
 							gotoxy(102,22);
-							if (dscb.pHead->data.NgayKhoiHanh.Nam != 0)
+							if (p->data.NgayKhoiHanh.Nam != 0)
 							{
-								cout << dscb.pHead->data.NgayKhoiHanh.Nam;
+								cout <<p->data.NgayKhoiHanh.Nam;
 							}
 							gotoxy(103,27);
-							if (dscb.pHead->data.NgayKhoiHanh.Gio <= 9)
+							if (p->data.NgayKhoiHanh.Gio <= 9)
 							{
-								cout << "0" << dscb.pHead->data.NgayKhoiHanh.Gio;
+								cout << "0" <<p->data.NgayKhoiHanh.Gio;
 							}
 							else
 							{
-								cout << dscb.pHead->data.NgayKhoiHanh.Gio;
+								cout << p->data.NgayKhoiHanh.Gio;
 							}
 							gotoxy(103,32);
-							cout << dscb.pHead->data.SanBayDen;
+							cout << p->data.SanBayDen;
 							gotoxy(103,37);
-							switch (dscb.pHead->data.TrangThai)
+							switch (p->data.TrangThai)
 							{
 								case 0:
-								{
-									cout << "HUY CHUYEN";
-									break;
-								}
+									{
+										cout << "HUY CHUYEN";
+										break;
+									}
 								case 1:
 									{
 										cout << "CON VE";
@@ -4142,12 +4148,12 @@ void XoaCB(List &dscb)
 									}
 								case 3:
 									{
-										cout << "HOAN TAT";
+										cout << "HOAN TAT";	
 										break;
 									}
 							}
 							gotoxy(103,42);
-							cout << dscb.pHead->data.SoHieuMB;
+							cout << p->data.SoHieuMB;
 							gotoxy(103,50);
 							cout << "Ban co chac chan muon xoa";
 							gotoxy(103,51);
@@ -4164,18 +4170,45 @@ void XoaCB(List &dscb)
 							}
 							if (InHoa(c) == 89)
 							{
-								DanhSach_CB *tam = dscb.pHead;
-								dscb.pHead = dscb.pHead->pNext;
-								delete tam;
-								ClearManHinhChinh();
-								return;
+								if (p == dscb.pHead)
+								{
+									if (p == dscb.pTail)
+									{
+										dscb.pTail = NULL;
+										delete p;
+										dscb.pHead = NULL;
+									}
+									else
+									{
+										dscb.pHead = dscb.pHead->pNext;
+										delete p;
+									}
+								}
+								else
+								{
+									if (p->pNext == NULL)
+									{
+										DanhSach_CB *tam;
+										for (tam = dscb.pHead; tam->pNext != p; tam = tam->pNext);
+										delete p;
+										tam->pNext = NULL;
+										dscb.pTail = tam;
+									}
+									else
+									{
+										DanhSach_CB *tam;
+										for (tam = dscb.pHead; tam->pNext != p; tam = tam->pNext);
+										tam->pNext = p->pNext;
+										delete p;
+									}
+								}
+								temp = "";
 							}
-							else
+						
 							{
 								AnConTro();
-								ChangeColor(15);
-								gotoxy(41,9);
-								for (int i = 1; i <= 45; i++ )
+								gotoxy(42,10);
+								for (int i = 1; i <= 43; i++)
 								{
 									for (int j = 1; j <= 120; j++)
 									{
@@ -4183,155 +4216,24 @@ void XoaCB(List &dscb)
 									}
 									gotoxy(wherex()-120,wherey()+1);
 								}
-							gotoxy(103+temp.length(),7);
-							HienConTro();
-							}
-							break;
-						}
-						if (chuyenbay->pNext->data.MaCB == temp)
-						{
-							AnConTro();
-							ChangeColor(15);
-							KhungCB();
-							gotoxy(40,44);
-							for (int i = 1; i <= 5; i++)
-							{
-								for (int j = 1; j <= 120; j++)
-								{
-									cout << " ";
-								}
-								gotoxy(wherex()-120,wherey()+1);
-							}
-							gotoxy(103,7);
-							cout << chuyenbay->pNext->data.MaCB;
-							gotoxy(103,12);
-							if (chuyenbay->pNext->data.NgayKhoiHanh.Ngay != 0)
-							{
-								if (chuyenbay->pNext->data.NgayKhoiHanh.Ngay <= 9)
-								{
-									cout << "0" << chuyenbay->pNext->data.NgayKhoiHanh.Ngay;
-								}
-								else
-								{
-									cout << chuyenbay->pNext->data.NgayKhoiHanh.Ngay;
-								}
-							}
-							gotoxy(103,17);
-							if (chuyenbay->pNext->data.NgayKhoiHanh.Thang != 0)
-							{
-								if (chuyenbay->pNext->data.NgayKhoiHanh.Thang  <= 9)
-								{
-									cout << "0" << chuyenbay->pNext->data.NgayKhoiHanh.Thang;
-								}
-								else
-								{
-									cout << chuyenbay->pNext->data.NgayKhoiHanh.Thang;
-								}
-							}
-							gotoxy(102,22);
-							if (chuyenbay->pNext->data.NgayKhoiHanh.Nam != 0)
-							{
-								cout << chuyenbay->pNext->data.NgayKhoiHanh.Nam;
-							}
-							gotoxy(103,27);
-							if (chuyenbay->pNext->data.NgayKhoiHanh.Gio <= 9)
-							{
-								cout << "0" << chuyenbay->pNext->data.NgayKhoiHanh.Gio;
-							}
-							else
-							{
-								cout << chuyenbay->pNext->data.NgayKhoiHanh.Gio;
-							}
-							gotoxy(103,32);
-							cout << chuyenbay->pNext->data.SanBayDen;
-							gotoxy(103,37);
-							switch (chuyenbay->pNext->data.TrangThai)
-							{
-								case 0:
-								{
-									cout << "HUY CHUYEN";
-									break;
-								}
-								case 1:
-									{
-										cout << "CON VE";
-										break;
-									}
-								case 2:
-									{
-										cout << "HET VE";
-										break;
-									}
-								case 3:
-									{
-										cout << "HOAN TAT";
-										break;
-									}
-							}
-							gotoxy(103,42);
-							cout << chuyenbay->pNext->data.SoHieuMB;
-							gotoxy(103,50);
-							cout << "Ban co chac chan muon xoa";
-							gotoxy(103,51);
-							cout << "Nhan Y de XOA; Nhan phim bat ky de huy";
-							c = getch();
-							if (c == -32 || c == 0)
-							{
-								kytu = 0;
-								c = getch();
-							}
-							else
-							{
-								kytu = 1;
-							}
-							if (InHoa(c) == 89)
-							{
-								if (chuyenbay->pNext->pNext == NULL)
-								{
-								//	delete dscb.pTail;
-									chuyenbay->pNext = NULL;
-									dscb.pTail = chuyenbay;
-									ClearManHinhChinh();
-									return;
-								}
-								else
-								{
-									DanhSach_CB *tam;
-									tam = chuyenbay->pNext;
-									chuyenbay->pNext = chuyenbay->pNext->pNext;
-									delete tam;
-									ClearManHinhChinh();
-									return;
-								}
-							}
-							else
-							{
-								AnConTro();
-								ChangeColor(15);
-								gotoxy(41,9);
-								for (int i = 1; i <= 45; i++ )
-								{
-									for (int j = 1; j <= 120; j++)
-									{
-										cout << " ";
-									}
-									gotoxy(wherex()-120,wherey()+1);
-								}
-								gotoxy(103+temp.length(),7);
+								gotoxy(103,7);
+								cout << "               ";
+								gotoxy(103,7);
+								cout << temp;
 								HienConTro();
 							}
-							break;
 						}
 					}
-					if (chuyenbay->pNext == NULL)
+					if  (!timthay)
 					{
 						AnConTro();
-						gotoxy(110,10);
+						gotoxy(103,10);
 						cout << "Khong tim thay du lieu";
 						Sleep(1000);
-						gotoxy(110,10);
-						cout << "                       ";
-						gotoxy(103+temp.length(),7);
+						gotoxy(103,10);
+						cout << "                      ";
+						gotoxy(103,7);
+						cout << temp;
 						HienConTro();
 					}
 				}
