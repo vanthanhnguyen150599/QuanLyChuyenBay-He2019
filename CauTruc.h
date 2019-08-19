@@ -7,17 +7,17 @@ using namespace std;
 struct Date
 {
 	
-	int Ngay;
-	int Thang;
-	int Nam;
-	int Gio;
+	int Ngay = 0;;
+	int Thang = 0;
+	int Nam = 0;
+	int Gio = 0;
 };
 
 struct MayBay
 {
 	string SoHieuMB;
 	string LoaiMayBay;
-	int SoDay;
+	int SoDay = 2;
 	int SoDong;
 };
 struct DanhSach_MB
@@ -33,22 +33,22 @@ struct DanhSachVe
 };
 struct ChuyenBay
 {
-	string MaCB;
+	string MaCB = "";
 	Date NgayKhoiHanh;
-	string SanBayDen;
+	string SanBayDen = "";
 	string SoHieuMB;
-	int TrangThai;//0:huy chuyen,1:con ve ,2:het ve ,3:hoan tat
+	int TrangThai = -1;//0:huy chuyen,1:con ve ,2:het ve ,3:hoan tat ?
 	DanhSachVe* data;
 };
 struct DanhSach_CB
 {
 	ChuyenBay data;
-	DanhSach_CB* pNext=NULL;
+	DanhSach_CB* pNext = NULL;
 };
 struct List
 {
-	DanhSach_CB* pHead=NULL;
-	DanhSach_CB* pTail=NULL;
+	DanhSach_CB* pHead = NULL;
+	DanhSach_CB* pTail = NULL;
 };
 
 struct HanhKhach
@@ -137,4 +137,35 @@ void DocFileCB(List & cb)
 		Them1ChuyenBayVao_Cuoi_DanhSach(cb,temp);
 	}
 }
-
+void XuatFileMB(DanhSach_MB &mb)
+{
+	ofstream fileout;
+	fileout.open("Danhsachmaybay.txt");
+	fileout <<  mb.SoLuong;
+	for (int i = 0; i < mb.SoLuong; i++)
+	{
+		fileout << endl;
+		fileout << mb.data[i]->SoHieuMB << endl;
+		fileout << mb.data[i]->LoaiMayBay << endl;
+		fileout << mb.data[i]->SoDay << endl;
+		fileout << mb.data[i]->SoDong;
+	}
+	fileout.close();
+}
+void XuatFileCB (List &cb)
+{
+	ofstream fileout;
+	fileout.open("Danhsachchuyenbay.txt");
+	for (DanhSach_CB *p = cb.pHead; p != NULL; p = p->pNext)
+	{
+		if (p != cb.pHead) fileout << endl;
+		fileout << p->data.MaCB << endl;
+		fileout << 	p->data.NgayKhoiHanh.Ngay << " ";
+		fileout << p->data.NgayKhoiHanh.Thang << " ";
+		fileout << p->data.NgayKhoiHanh.Nam << " ";
+		fileout << p->data.NgayKhoiHanh.Gio << endl;
+		fileout << p->data.SanBayDen << endl;
+		fileout << p->data.SoHieuMB << endl;
+		fileout << p->data.TrangThai;
+	}
+}
